@@ -1,0 +1,16 @@
+#gameBoard{
+    display: grid;
+    grid-template-columns: repeat(16, 20px); /* 16 kolumn o szerokości 20px */
+    grid-template-rows: repeat(16, 20px);    /* 16 wierszy o wysokości 20px */
+    gap: 1px; /* Odstęp między komórkami */
+    background-color: #333;
+    width: 321px; /* Całkowita szerokość, z uwzględnieniem odstępów */
+    height: 321px; /* Całkowita wysokość, z uwzględnieniem odstępów */
+    margin: 20px auto;
+}
+.cell {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc; /* Możesz wyłączyć, jeśli gap w `grid` Ci wystarczy */
+}
