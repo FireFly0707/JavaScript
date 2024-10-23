@@ -20,13 +20,11 @@ function combineMultipleArrays(operation, ...arrays) {
 }
 
 // Przykład użycia:
-const array1 = [4, 5, 6];
-const array2 = [10, 20, 30];
+const array1 = [1, 2, 3];
+const array2 = [5, 6, 7];
+const array3 = [10, 20, 30];
 
-const sumFunction = (a, b) => a + b;
+const sumThreeNumbers = (a, b, c) => a + b + c;
 
-const result = combineArrays(sumFunction, array1, array2);
-console.log(result); // Zwraca [14, 25, 36]
-
-const result2 = combineArrays((a, b) =>({x:a,y:b}), array1, array2);
-console.log(result2); // Zwraca [{x:4,y:10}, {x:5,y:20}, {x:6,y:30}]
+const result = combineMultipleArrays(sumThreeNumbers, array1, array2, array3);
+console.log(result); // Zwraca [16, 28, 40]
