@@ -1,17 +1,18 @@
-const colours = ['red', 'green', 'blue', 'orange', 'purple', 'yellow', 'black', 'white', 'pink', 'brown'];
-const paragraphs = document.querySelectorAll('#paragraphs p');
+
+const colours = ['red', 'green', 'blue', 'orange', 'purple', 'yellow', 'black', 'pink', 'brown'];
 
 document.addEventListener('DOMContentLoaded', () => {
-    const colours = ['red', 'green', 'blue', 'orange', 'purple', 'yellow', 'black', 'white', 'pink', 'brown'];
+    
     const paragraphs = document.querySelectorAll('#paragraphs p');
 
     console.log('Script loaded');
     console.log('Paragraphs:', paragraphs);
 
-    paragraphs.forEach((p) => {
+    paragraphs.forEach((p,index) => {
         const randomColour = getRandomColour();
         p.style.color = randomColour;
-        console.log(`Paragraph color changed to: ${randomColour}`);
+        var title = 'Paragraph ' + (index + 1) + ' Length: ' + p.textContent.length;
+        p.setAttribute('title', title);
     });});
 
 function getRandomColour() {
