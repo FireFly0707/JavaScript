@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Paragraphs:', paragraphs);
 
     paragraphs.forEach((p, index) => {
+        
+        const header = document.createElement('h2');
+        header.textContent = 'Paragraf ' + (index + 1);
+        p.parentNode.insertBefore(header, p);
+
         const randomColour = getRandomColour();
         p.style.color = randomColour;
         var title = 'Paragraph ' + (index + 1) + ' Length: ' + p.textContent.length;
