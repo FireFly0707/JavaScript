@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Paragraphs:', paragraphs);
 
     paragraphs.forEach((p, index) => {
-        
+
         const header = document.createElement('h2');
         header.textContent = 'Paragraf ' + (index + 1);
         p.parentNode.insertBefore(header, p);
@@ -18,6 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
         p.style.color = randomColour;
         var title = 'Paragraph ' + (index + 1) + ' Length: ' + p.textContent.length;
         p.setAttribute('title', title);
+
+        header.addEventListener('click', () => {
+            if (p.style.display === 'none') {
+                p.style.display = 'block';
+            } else {
+                p.style.display = 'none';
+            }
+        });
+        
         p.addEventListener('click', () => {
             // Reset styles for all paragraphs
             paragraphs.forEach(paragraph => {
