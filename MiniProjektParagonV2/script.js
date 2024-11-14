@@ -72,8 +72,8 @@ function renderReceipt() {
         <td>${item.price.toFixed(2)} zł</td>
         <td>${totalPrice.toFixed(2)} zł</td>
         <td>
-            <button class="edit-button" onclick="editItem(${index})"></button>
-          <button class="delete-button" onclick="deleteItem(${index})"></button>
+            <button class="edit-button" onclick="editItem('${item.id}')"></button>
+          <button class="delete-button" onclick="deleteItem('${item.id}')"></button>
         </td>
       `;
         receiptBody.appendChild(row);

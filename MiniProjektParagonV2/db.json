@@ -1,12 +1,6 @@
 {
   "receiptItems": [
     {
-      "id": "86ad",
-      "name": "Pizza",
-      "price": 2,
-      "quantity": 2
-    },
-    {
       "id": "59c1",
       "name": "dasd",
       "price": 1,
@@ -19,10 +13,16 @@
       "quantity": 12.323
     },
     {
-      "id": "8907",
-      "name": "232",
-      "price": 1,
-      "quantity": 1
+      "id": "8c1f",
+      "name": "1",
+      "price": 3,
+      "quantity": 2
+    },
+    {
+      "name": "dupa",
+      "price": 2,
+      "quantity": 3,
+      "id": "51a5"
     }
   ]
 }
