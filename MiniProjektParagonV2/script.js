@@ -1,9 +1,57 @@
-let receiptItems = JSON.parse(localStorage.getItem('receiptItems')) || [];
+let receiptItems = [];  // Puste na początku, dane będą pobierane z serwera
 
-function saveToLocalStorage() {
-    localStorage.setItem('receiptItems', JSON.stringify(receiptItems));
+// Funkcja do pobierania danych z backendu
+async function fetchReceiptItems() {
+    const response = await fetch('http://localhost:3000/receiptItems');
+    const data = await response.json();
+    receiptItems = data;
+    renderReceipt();
 }
 
+// Funkcja do zapisywania danych na serwerze
+async function saveReceiptItem(item) {
+    const response = await fetch('http://localhost:3000/receiptItems', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+    });
+
+    const newItem = await response.json(); // Serwer zwróci item z przypisanym id
+    receiptItems.push(newItem);
+    renderReceipt();
+}
+
+// Funkcja do aktualizowania pozycji na serwerze
+async function updateReceiptItem(item, id) {
+    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+    });
+
+    const updatedItem = await response.json(); // Zaktualizowany przedmiot
+    const index = receiptItems.findIndex(i => i.id === id);
+    receiptItems[index] = updatedItem;
+    renderReceipt();
+}
+
+// Funkcja do usuwania pozycji z serwera
+async function deleteReceiptItem(id) {
+    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        receiptItems = receiptItems.filter(item => item.id !== id);
+        renderReceipt();
+    }
+}
+
+// Funkcja renderująca paragon
 function renderReceipt() {
     const receiptBody = document.getElementById('receiptBody');
     receiptBody.innerHTML = '';
@@ -24,7 +72,7 @@ function renderReceipt() {
         <td>${item.price.toFixed(2)} zł</td>
         <td>${totalPrice.toFixed(2)} zł</td>
         <td>
-           <button class="edit-button" onclick="editItem(${index})"></button>
+            <button class="edit-button" onclick="editItem(${index})"></button>
           <button class="delete-button" onclick="deleteItem(${index})"></button>
         </td>
       `;
@@ -41,13 +89,13 @@ function renderReceipt() {
     `;
     receiptBody.appendChild(totalRow);
 }
-const itemDialog = document.getElementById('itemDialog');
-const itemName = document.getElementById('itemName');
-const itemPrice = document.getElementById('itemPrice');
-const itemQuantity = document.getElementById('itemQuantity');
 
-let editingIndex = null;
+// Wywołanie funkcji fetch przy załadowaniu strony
+window.onload = () => {
+    fetchReceiptItems();
+};
 
+// Dodawanie nowej pozycji
 document.getElementById('addItemButton').onclick = () => {
     editingIndex = null;
     itemName.value = '';
@@ -58,8 +106,8 @@ document.getElementById('addItemButton').onclick = () => {
 
 document.getElementById('confirmButton').onclick = () => {
     const name = itemName.value.trim();
-    const price = parseFloat(itemPrice.value)
-    const quantity = parseFloat(itemQuantity.value)
+    const price = parseFloat(itemPrice.value);
+    const quantity = parseFloat(itemQuantity.value);
     const errorMessage = document.getElementById('error-message');
 
     errorMessage.style.display = 'none';
@@ -69,7 +117,7 @@ document.getElementById('confirmButton').onclick = () => {
     if (name === '') {
         errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
         errorMessage.style.display = 'block';
-        return; 
+        return;
     }
 
     // Walidacja ceny
@@ -79,45 +127,43 @@ document.getElementById('confirmButton').onclick = () => {
         return;
     }
 
-    // Walidacja ilości (teraz może to być liczba rzeczywista)
+    // Walidacja ilości
     if (isNaN(quantity) || quantity.toFixed(2) <= 0) {
         errorMessage.textContent = 'Ilość musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
-    // Dodawanie/edycja pozycji
-    if (editingIndex !== null) {
-        receiptItems[editingIndex] = { name, price, quantity };
-    } else {
-        receiptItems.push({ name, price, quantity });
-    }
+    const item = { name, price, quantity };
 
-    saveToLocalStorage();  
-    renderReceipt();       
-    itemDialog.close();    
-};
-document.getElementById('resetButton').onclick = () => {
+    if (editingIndex !== null) {
+        updateReceiptItem(item, editingIndex); // Przekazujemy id, aby edytować przedmiot
+    } else {
+        saveReceiptItem(item); // Dodajemy nowy przedmiot
+    }
 
     itemDialog.close();
 };
-function editItem(index) {
-    editingIndex = index;
-    const item = receiptItems[index];
 
+document.getElementById('resetButton').onclick = () => {
+    itemDialog.close();
+};
+
+// Edycja pozycji
+function editItem(id) {
+    const item = receiptItems.find(item => item.id === id);
+
+    editingIndex = item.id;
     itemName.value = item.name;
     itemPrice.value = item.price;
     itemQuantity.value = item.quantity;
 
     itemDialog.showModal();
 }
-function deleteItem(index) {
+
+// Usuwanie pozycji
+function deleteItem(id) {
     if (confirm('Czy na pewno chcesz usunąć tę pozycję?')) {
-        receiptItems.splice(index, 1);
-        saveToLocalStorage();
-        renderReceipt();
+        deleteReceiptItem(id); // Przekazujemy id do usunięcia
     }
 }
-window.onload = () => {
-    renderReceipt();
-};
