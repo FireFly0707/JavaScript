@@ -41,10 +41,35 @@ document.getElementById('addItemButton').onclick = () => {
 };
 
 document.getElementById('confirmButton').onclick = () => {
-    const name = itemName.value;
+    const name = itemName.value.trim();  // Usuwamy białe znaki na początku i końcu
     const price = parseFloat(itemPrice.value);
     const quantity = parseInt(itemQuantity.value);
+    const errorMessage = document.getElementById('error-message');
 
+    // Resetujemy komunikat o błędzie
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
+
+    // Walidacja
+    if (name === '') {
+        errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
+        errorMessage.style.display = 'block';
+        return; // Zatrzymujemy dalsze wykonywanie
+    }
+
+    if (isNaN(price) || price <= 0) {
+        errorMessage.textContent = 'Cena jednostkowa musi być liczbą większą od 0.';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    if (isNaN(quantity) || quantity <= 0) {
+        errorMessage.textContent = 'Ilość musi być liczbą całkowitą większą od 0.';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Jeśli wszystkie dane są poprawne, dodajemy lub edytujemy pozycję
     if (editingIndex !== null) {
         // Edytowanie istniejącej pozycji
         receiptItems[editingIndex] = { name, price, quantity };
@@ -53,12 +78,12 @@ document.getElementById('confirmButton').onclick = () => {
         receiptItems.push({ name, price, quantity });
     }
 
-    saveToLocalStorage();
-    renderReceipt();
-    itemDialog.close();
+    saveToLocalStorage();  // Zapisujemy dane w localStorage
+    renderReceipt();       // Aktualizujemy widok
+    itemDialog.close();    // Zamykamy dialog
 };
-ocument.getElementById('resetButton').onclick = () => {
-   
+document.getElementById('resetButton').onclick = () => {
+
     itemDialog.close();
 };
 function editItem(index) {
