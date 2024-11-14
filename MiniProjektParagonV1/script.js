@@ -8,22 +8,38 @@ function renderReceipt() {
     const receiptBody = document.getElementById('receiptBody');
     receiptBody.innerHTML = '';
 
+    let totalSum = 0;
+
     receiptItems.forEach((item, index) => {
         const row = document.createElement('tr');
+        const totalPrice = item.price * item.quantity;
+
+        // Dodajemy do całkowitej sumy dla każdego elementu
+        totalSum += totalPrice;
 
         row.innerHTML = `
         <td>${index + 1}</td>
         <td>${item.name}</td>
-        <td>${item.price.toFixed(2)} zł</td>
         <td>${item.quantity}</td>
-        <td>${(item.price * item.quantity).toFixed(2)} zł</td>
+        <td>${item.price.toFixed(2)} zł</td>
+        <td>${totalPrice.toFixed(2)} zł</td>
         <td>
-          <button onclick="editItem(${index})">Edytuj</button>
-          <button onclick="deleteItem(${index})">Usuń</button>
+           <button class="edit-button" onclick="editItem(${index})"></button>
+          <button class="delete-button" onclick="deleteItem(${index})"></button>
         </td>
       `;
         receiptBody.appendChild(row);
     });
+
+    // Dodanie wiersza z ceną całkowitą pod kolumną "Cena łączna"
+    const totalRow = document.createElement('tr');
+    totalRow.innerHTML = `
+       <td colspan="3"></td>
+      <td style="font-weight: bold; text-align: left;">RAZEM:</td>
+      <td style="font-weight: bold; text-align: center;">${totalSum.toFixed(2)} zł</td>
+      <td></td>
+    `;
+    receiptBody.appendChild(totalRow);
 }
 const itemDialog = document.getElementById('itemDialog');
 const itemName = document.getElementById('itemName');
@@ -41,20 +57,20 @@ document.getElementById('addItemButton').onclick = () => {
 };
 
 document.getElementById('confirmButton').onclick = () => {
-    const name = itemName.value.trim();  // Usuwamy białe znaki na początku i końcu
+    const name = itemName.value.trim();
     const price = parseFloat(itemPrice.value);
     const quantity = parseInt(itemQuantity.value);
     const errorMessage = document.getElementById('error-message');
 
-    // Resetujemy komunikat o błędzie
+   
     errorMessage.style.display = 'none';
     errorMessage.textContent = '';
 
-    // Walidacja
+    
     if (name === '') {
         errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
         errorMessage.style.display = 'block';
-        return; // Zatrzymujemy dalsze wykonywanie
+        return; 
     }
 
     if (isNaN(price) || price <= 0) {
@@ -69,18 +85,18 @@ document.getElementById('confirmButton').onclick = () => {
         return;
     }
 
-    // Jeśli wszystkie dane są poprawne, dodajemy lub edytujemy pozycję
+   
     if (editingIndex !== null) {
-        // Edytowanie istniejącej pozycji
+       
         receiptItems[editingIndex] = { name, price, quantity };
     } else {
-        // Dodawanie nowej pozycji
+       
         receiptItems.push({ name, price, quantity });
     }
 
-    saveToLocalStorage();  // Zapisujemy dane w localStorage
-    renderReceipt();       // Aktualizujemy widok
-    itemDialog.close();    // Zamykamy dialog
+    saveToLocalStorage();  
+    renderReceipt();       
+    itemDialog.close();    
 };
 document.getElementById('resetButton').onclick = () => {
 

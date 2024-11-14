@@ -50,19 +50,64 @@ body {
   
   /* Stylizacja przycisków */
   button {
-    padding: 8px 16px;
+    padding: 5px 10px;
     margin: 0 5px;
-    font-size: 14px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    background-color: #f4f4f4; /* Kolor tła przycisków, dopasowany do strony */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: #ddd; /* Zmiana koloru tła przycisku na hover */
+  }
+ /* Kontener na przycisk dodawania pozycji */
+.add-item-container {
+    display: flex;
+    justify-content: flex-end; /* Wyrównanie przycisku do prawej */
+    margin-top: 20px;  /* Odstęp od tabeli */
+  }
+  
+  /* Stylizacja przycisku dodawania pozycji */
+  button.add-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4CAF50; /* Kolor tła przycisku */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.add-button:hover {
+    background-color: #45a049; /* Zmiana koloru tła przy hover */
+  }
+  
+  /* Ikona plus */
+  button .plus-icon {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+  
+  
+  /* Stylizacja ikonek przycisków */
+  button.edit-button::before {
+    content: '\1F6E0'; /* Unicode dla ikony śrubki */
+    font-size: 18px;
+    color: #333;
+  }
+  
+  button.delete-button::before {
+    content: '\00D7'; /* Unicode dla "x" */
+    font-size: 18px;
+    color: #ff0000; /* Czerwony kolor dla przycisku usuwania */
   }
   
   #addItemButton {

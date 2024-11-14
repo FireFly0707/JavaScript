@@ -7,20 +7,26 @@
 </head>
 <body>
   <h1>Paragon</h1>
-  <button id="addItemButton">Dodaj pozycję</button>
   <table id="receiptTable">
     <thead>
       <tr>
-        <th>Nr</th>
-        <th>Nazwa</th>
-        <th>Cena jednostkowa</th>
-        <th>Ilość</th>
-        <th>Cena łączna</th>
-        <th>Akcje</th>
+        <th>LP</th>
+        <th>NAZWA</th>
+        <th>ILOŚĆ</th>
+        <th>CENA</th>
+        <th>SUMA</th>
+        <th>AKCJE</th>
       </tr>
     </thead>
     <tbody id="receiptBody"></tbody>
   </table>
+
+  <!-- Kontener na przycisk dodawania pozycji -->
+  <div class="add-item-container">
+    <button id="addItemButton" class="add-button">
+      <span class="plus-icon">+</span> Dodaj pozycję
+    </button>
+  </div>
 
   <dialog id="itemDialog">
     <form method="dialog">
