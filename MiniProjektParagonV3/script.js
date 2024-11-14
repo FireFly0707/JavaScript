@@ -98,14 +98,33 @@ document.getElementById('addItemButton').onclick = () => {
     itemDialog.showModal();
 };
 
-document.getElementById('confirmButton').onclick = () => {
-    const name = itemName.value.trim();
-    const price = parseFloat(itemPrice.value);
-    const quantity = parseFloat(itemQuantity.value);
-    const errorMessage = document.getElementById('error-message');
+document.getElementById('confirmButton').onclick = (event) => {
+    event.preventDefault(); // Zatrzymuje wysyłanie formularza, żeby móc wykonać walidację
 
+    const itemPrice = document.getElementById('itemPrice');
+    const itemQuantity = document.getElementById('itemQuantity');
+    const errorMessage = document.getElementById('error-message');
+    
     errorMessage.style.display = 'none';
     errorMessage.textContent = '';
+
+    // Sprawdzanie, czy formularz jest ważny przy pomocy HTML5 validation
+    if (!itemPrice.checkValidity()) {
+        errorMessage.textContent = 'Cena jednostkowa powinna być wartością większą od 0 z dokładnością do części setnych.';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    if (!itemQuantity.checkValidity()) {
+        errorMessage.textContent = 'Ilość powinna być wartością większą od 0 z dokładnością do części setnych.';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Jeśli walidacja HTML5 przeszła pomyślnie, wykonaj dalszą logikę
+    const price = parseFloat(itemPrice.value);
+    const quantity = parseFloat(itemQuantity.value);
+    const name = itemName.value.trim();
 
     // Walidacja nazwy
     if (name === '') {
@@ -114,29 +133,17 @@ document.getElementById('confirmButton').onclick = () => {
         return;
     }
 
-    // Walidacja ceny
-    if (isNaN(price) || price.toFixed(2) <= 0) {
-        errorMessage.textContent = 'Cena jednostkowa musi być liczbą większą od 0.';
-        errorMessage.style.display = 'block';
-        return;
-    }
-
-    // Walidacja ilości
-    if (isNaN(quantity) || quantity.toFixed(2) <= 0) {
-        errorMessage.textContent = 'Ilość musi być liczbą większą od 0.';
-        errorMessage.style.display = 'block';
-        return;
-    }
-
+    // Tworzymy obiekt przedmiotu
     const item = { name, price, quantity };
 
+    // Przekazywanie do odpowiedniej funkcji w zależności od edytowania lub dodawania
     if (editingIndex !== null) {
-        updateReceiptItem(item, editingIndex); // Przekazujemy id, aby edytować przedmiot
+        updateReceiptItem(item, editingIndex);  // Edytujemy przedmiot
     } else {
-        saveReceiptItem(item); // Dodajemy nowy przedmiot
+        saveReceiptItem(item);  // Dodajemy nowy przedmiot
     }
 
-    itemDialog.close();
+    itemDialog.close();  // Zamknięcie okna dialogowego
 };
 
 document.getElementById('resetButton').onclick = () => {
