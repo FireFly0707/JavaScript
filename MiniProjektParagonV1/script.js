@@ -20,7 +20,7 @@ function renderReceipt() {
         row.innerHTML = `
         <td>${index + 1}</td>
         <td>${item.name}</td>
-        <td>${item.quantity}</td>
+        <td>${item.quantity.toFixed(2)}</td>
         <td>${item.price.toFixed(2)} zł</td>
         <td>${totalPrice.toFixed(2)} zł</td>
         <td>
@@ -59,38 +59,37 @@ document.getElementById('addItemButton').onclick = () => {
 document.getElementById('confirmButton').onclick = () => {
     const name = itemName.value.trim();
     const price = parseFloat(itemPrice.value);
-    const quantity = parseInt(itemQuantity.value);
+    const quantity = parseFloat(itemQuantity.value); 
     const errorMessage = document.getElementById('error-message');
 
-   
     errorMessage.style.display = 'none';
     errorMessage.textContent = '';
 
-    
+    // Walidacja nazwy
     if (name === '') {
         errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
         errorMessage.style.display = 'block';
         return; 
     }
 
+    // Walidacja ceny
     if (isNaN(price) || price <= 0) {
         errorMessage.textContent = 'Cena jednostkowa musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
+    // Walidacja ilości (teraz może to być liczba rzeczywista)
     if (isNaN(quantity) || quantity <= 0) {
-        errorMessage.textContent = 'Ilość musi być liczbą całkowitą większą od 0.';
+        errorMessage.textContent = 'Ilość musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
-   
+    // Dodawanie/edycja pozycji
     if (editingIndex !== null) {
-       
         receiptItems[editingIndex] = { name, price, quantity };
     } else {
-       
         receiptItems.push({ name, price, quantity });
     }
 
