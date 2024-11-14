@@ -58,8 +58,8 @@ document.getElementById('addItemButton').onclick = () => {
 
 document.getElementById('confirmButton').onclick = () => {
     const name = itemName.value.trim();
-    const price = parseFloat(itemPrice.value);
-    const quantity = parseFloat(itemQuantity.value); 
+    const price = parseFloat(itemPrice.value)
+    const quantity = parseFloat(itemQuantity.value)
     const errorMessage = document.getElementById('error-message');
 
     errorMessage.style.display = 'none';
@@ -73,14 +73,14 @@ document.getElementById('confirmButton').onclick = () => {
     }
 
     // Walidacja ceny
-    if (isNaN(price) || price <= 0) {
+    if (isNaN(price) || price.toFixed(2) <= 0) {
         errorMessage.textContent = 'Cena jednostkowa musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
     // Walidacja ilości (teraz może to być liczba rzeczywista)
-    if (isNaN(quantity) || quantity <= 0) {
+    if (isNaN(quantity) || quantity.toFixed(2) <= 0) {
         errorMessage.textContent = 'Ilość musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
