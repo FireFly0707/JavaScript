@@ -14,9 +14,9 @@ function renderReceipt() {
         row.innerHTML = `
         <td>${index + 1}</td>
         <td>${item.name}</td>
-        <td>${item.price.toFixed(2)}</td>
+        <td>${item.price.toFixed(2)} zł</td>
         <td>${item.quantity}</td>
-        <td>${(item.price * item.quantity).toFixed(2)}</td>
+        <td>${(item.price * item.quantity).toFixed(2)} zł</td>
         <td>
           <button onclick="editItem(${index})">Edytuj</button>
           <button onclick="deleteItem(${index})">Usuń</button>
