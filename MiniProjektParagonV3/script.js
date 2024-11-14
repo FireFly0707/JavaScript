@@ -2,49 +2,43 @@ let receiptItems = [];  // Puste na początku, dane będą pobierane z serwera
 
 // Funkcja do pobierania danych z backendu
 async function fetchReceiptItems() {
-    const response = await fetch('http://localhost:3000/receiptItems');
+    const response = await fetch('http://localhost:3000/receiptItems'); // Nowy backend
     const data = await response.json();
     receiptItems = data;
     renderReceipt();
 }
 
-// Funkcja do zapisywania danych na serwerze
 async function saveReceiptItem(item) {
-    const response = await fetch('http://localhost:3000/receiptItems', {
+    const response = await fetch('http://localhost:3000/receiptItems', { // Nowy backend
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(item)
     });
-
-    const newItem = await response.json(); // Serwer zwróci item z przypisanym id
+    const newItem = await response.json();
     receiptItems.push(newItem);
     renderReceipt();
 }
 
-// Funkcja do aktualizowania pozycji na serwerze
 async function updateReceiptItem(item, id) {
-    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
+    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, { // Nowy backend
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(item)
     });
-
-    const updatedItem = await response.json(); // Zaktualizowany przedmiot
+    const updatedItem = await response.json();
     const index = receiptItems.findIndex(i => i.id === id);
     receiptItems[index] = updatedItem;
     renderReceipt();
 }
 
-// Funkcja do usuwania pozycji z serwera
 async function deleteReceiptItem(id) {
-    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
+    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, { // Nowy backend
         method: 'DELETE'
     });
-
     if (response.ok) {
         receiptItems = receiptItems.filter(item => item.id !== id);
         renderReceipt();
@@ -72,8 +66,8 @@ function renderReceipt() {
         <td>${item.price.toFixed(2)} zł</td>
         <td>${totalPrice.toFixed(2)} zł</td>
         <td>
-            <button class="edit-button" onclick="editItem('${item.id}')"></button>
-          <button class="delete-button" onclick="deleteItem('${item.id}')"></button>
+            <button class="edit-button" onclick="editItem(${item.id})"></button>
+          <button class="delete-button" onclick="deleteItem(${item.id})"></button>
         </td>
       `;
         receiptBody.appendChild(row);
