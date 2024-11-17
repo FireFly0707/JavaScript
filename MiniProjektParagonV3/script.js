@@ -1,15 +1,15 @@
-let receiptItems = [];  // Puste na początku, dane będą pobierane z serwera
+let receiptItems = [];  
 
-// Funkcja do pobierania danych z backendu
+
 async function fetchReceiptItems() {
-    const response = await fetch('http://localhost:3000/receiptItems'); // Nowy backend
+    const response = await fetch('http://localhost:3000/receiptItems'); 
     const data = await response.json();
     receiptItems = data;
     renderReceipt();
 }
 
 async function saveReceiptItem(item) {
-    const response = await fetch('http://localhost:3000/receiptItems', { // Nowy backend
+    const response = await fetch('http://localhost:3000/receiptItems', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ async function saveReceiptItem(item) {
 }
 
 async function updateReceiptItem(item, id) {
-    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, { // Nowy backend
+    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ async function updateReceiptItem(item, id) {
 }
 
 async function deleteReceiptItem(id) {
-    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, { // Nowy backend
+    const response = await fetch(`http://localhost:3000/receiptItems/${id}`, { 
         method: 'DELETE'
     });
     if (response.ok) {
@@ -45,7 +45,7 @@ async function deleteReceiptItem(id) {
     }
 }
 
-// Funkcja renderująca paragon
+
 function renderReceipt() {
     const receiptBody = document.getElementById('receiptBody');
     receiptBody.innerHTML = '';
@@ -56,7 +56,7 @@ function renderReceipt() {
         const row = document.createElement('tr');
         const totalPrice = item.price * item.quantity;
 
-        // Dodajemy do całkowitej sumy dla każdego elementu
+        
         totalSum += totalPrice;
 
         row.innerHTML = `
@@ -73,7 +73,7 @@ function renderReceipt() {
         receiptBody.appendChild(row);
     });
 
-    // Dodanie wiersza z ceną całkowitą pod kolumną "Cena łączna"
+    
     const totalRow = document.createElement('tr');
     totalRow.innerHTML = `
        <td colspan="3"></td>
@@ -84,12 +84,12 @@ function renderReceipt() {
     receiptBody.appendChild(totalRow);
 }
 
-// Wywołanie funkcji fetch przy załadowaniu strony
+
 window.onload = () => {
     fetchReceiptItems();
 };
 
-// Dodawanie nowej pozycji
+
 document.getElementById('addItemButton').onclick = () => {
     editingIndex = null;
     itemName.value = '';
@@ -99,7 +99,7 @@ document.getElementById('addItemButton').onclick = () => {
 };
 
 document.getElementById('confirmButton').onclick = (event) => {
-    event.preventDefault(); // Zatrzymuje wysyłanie formularza, żeby móc wykonać walidację
+    event.preventDefault();
 
     const itemPrice = document.getElementById('itemPrice');
     const itemQuantity = document.getElementById('itemQuantity');
@@ -108,7 +108,7 @@ document.getElementById('confirmButton').onclick = (event) => {
     errorMessage.style.display = 'none';
     errorMessage.textContent = '';
 
-    // Sprawdzanie, czy formularz jest ważny przy pomocy HTML5 validation
+    
     if (!itemPrice.checkValidity()) {
         errorMessage.textContent = 'Cena jednostkowa powinna być wartością większą od 0 z dokładnością do części setnych.';
         errorMessage.style.display = 'block';
@@ -121,36 +121,36 @@ document.getElementById('confirmButton').onclick = (event) => {
         return;
     }
 
-    // Jeśli walidacja HTML5 przeszła pomyślnie, wykonaj dalszą logikę
+    
     const price = parseFloat(itemPrice.value);
     const quantity = parseFloat(itemQuantity.value);
     const name = itemName.value.trim();
 
-    // Walidacja nazwy
+   
     if (name === '') {
         errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
         errorMessage.style.display = 'block';
         return;
     }
 
-    // Tworzymy obiekt przedmiotu
+  
     const item = { name, price, quantity };
 
-    // Przekazywanie do odpowiedniej funkcji w zależności od edytowania lub dodawania
+    
     if (editingIndex !== null) {
-        updateReceiptItem(item, editingIndex);  // Edytujemy przedmiot
+        updateReceiptItem(item, editingIndex);  
     } else {
-        saveReceiptItem(item);  // Dodajemy nowy przedmiot
+        saveReceiptItem(item); 
     }
 
-    itemDialog.close();  // Zamknięcie okna dialogowego
+    itemDialog.close(); 
 };
 
 document.getElementById('resetButton').onclick = () => {
     itemDialog.close();
 };
 
-// Edycja pozycji
+
 function editItem(id) {
     const item = receiptItems.find(item => item.id === id);
 
@@ -162,9 +162,9 @@ function editItem(id) {
     itemDialog.showModal();
 }
 
-// Usuwanie pozycji
+
 function deleteItem(id) {
     if (confirm('Czy na pewno chcesz usunąć tę pozycję?')) {
-        deleteReceiptItem(id); // Przekazujemy id do usunięcia
+        deleteReceiptItem(id); 
     }
 }
