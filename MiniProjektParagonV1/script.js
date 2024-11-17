@@ -14,7 +14,7 @@ function renderReceipt() {
         const row = document.createElement('tr');
         const totalPrice = item.price * item.quantity;
 
-        // Dodajemy do całkowitej sumy dla każdego elementu
+
         totalSum += totalPrice;
 
         row.innerHTML = `
@@ -31,7 +31,7 @@ function renderReceipt() {
         receiptBody.appendChild(row);
     });
 
-    // Dodanie wiersza z ceną całkowitą pod kolumną "Cena łączna"
+    
     const totalRow = document.createElement('tr');
     totalRow.innerHTML = `
        <td colspan="3"></td>
@@ -65,28 +65,28 @@ document.getElementById('confirmButton').onclick = () => {
     errorMessage.style.display = 'none';
     errorMessage.textContent = '';
 
-    // Walidacja nazwy
+    
     if (name === '') {
         errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
         errorMessage.style.display = 'block';
         return; 
     }
 
-    // Walidacja ceny
+
     if (isNaN(price) || price.toFixed(2) <= 0) {
         errorMessage.textContent = 'Cena jednostkowa musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
-    // Walidacja ilości (teraz może to być liczba rzeczywista)
+    
     if (isNaN(quantity) || quantity.toFixed(2) <= 0) {
         errorMessage.textContent = 'Ilość musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
-    // Dodawanie/edycja pozycji
+    
     if (editingIndex !== null) {
         receiptItems[editingIndex] = { name, price, quantity };
     } else {
