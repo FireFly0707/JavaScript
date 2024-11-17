@@ -1,6 +1,6 @@
-let receiptItems = [];  // Puste na początku, dane będą pobierane z serwera
+let receiptItems = [];
 
-// Funkcja do pobierania danych z backendu
+
 async function fetchReceiptItems() {
     const response = await fetch('http://localhost:3000/receiptItems');
     const data = await response.json();
@@ -8,7 +8,7 @@ async function fetchReceiptItems() {
     renderReceipt();
 }
 
-// Funkcja do zapisywania danych na serwerze
+
 async function saveReceiptItem(item) {
     const response = await fetch('http://localhost:3000/receiptItems', {
         method: 'POST',
@@ -18,12 +18,12 @@ async function saveReceiptItem(item) {
         body: JSON.stringify(item)
     });
 
-    const newItem = await response.json(); // Serwer zwróci item z przypisanym id
+    const newItem = await response.json();
     receiptItems.push(newItem);
     renderReceipt();
 }
 
-// Funkcja do aktualizowania pozycji na serwerze
+
 async function updateReceiptItem(item, id) {
     const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
         method: 'PUT',
@@ -33,13 +33,13 @@ async function updateReceiptItem(item, id) {
         body: JSON.stringify(item)
     });
 
-    const updatedItem = await response.json(); // Zaktualizowany przedmiot
+    const updatedItem = await response.json();
     const index = receiptItems.findIndex(i => i.id === id);
     receiptItems[index] = updatedItem;
     renderReceipt();
 }
 
-// Funkcja do usuwania pozycji z serwera
+
 async function deleteReceiptItem(id) {
     const response = await fetch(`http://localhost:3000/receiptItems/${id}`, {
         method: 'DELETE'
@@ -51,7 +51,7 @@ async function deleteReceiptItem(id) {
     }
 }
 
-// Funkcja renderująca paragon
+
 function renderReceipt() {
     const receiptBody = document.getElementById('receiptBody');
     receiptBody.innerHTML = '';
@@ -62,7 +62,7 @@ function renderReceipt() {
         const row = document.createElement('tr');
         const totalPrice = item.price * item.quantity;
 
-        // Dodajemy do całkowitej sumy dla każdego elementu
+
         totalSum += totalPrice;
 
         row.innerHTML = `
@@ -79,7 +79,7 @@ function renderReceipt() {
         receiptBody.appendChild(row);
     });
 
-    // Dodanie wiersza z ceną całkowitą pod kolumną "Cena łączna"
+
     const totalRow = document.createElement('tr');
     totalRow.innerHTML = `
        <td colspan="3"></td>
@@ -90,12 +90,12 @@ function renderReceipt() {
     receiptBody.appendChild(totalRow);
 }
 
-// Wywołanie funkcji fetch przy załadowaniu strony
+
 window.onload = () => {
     fetchReceiptItems();
 };
 
-// Dodawanie nowej pozycji
+
 document.getElementById('addItemButton').onclick = () => {
     editingIndex = null;
     itemName.value = '';
@@ -113,21 +113,21 @@ document.getElementById('confirmButton').onclick = () => {
     errorMessage.style.display = 'none';
     errorMessage.textContent = '';
 
-    // Walidacja nazwy
+
     if (name === '') {
         errorMessage.textContent = 'Nazwa produktu nie może być pusta.';
         errorMessage.style.display = 'block';
         return;
     }
 
-    // Walidacja ceny
+
     if (isNaN(price) || price.toFixed(2) <= 0) {
         errorMessage.textContent = 'Cena jednostkowa musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
         return;
     }
 
-    // Walidacja ilości
+
     if (isNaN(quantity) || quantity.toFixed(2) <= 0) {
         errorMessage.textContent = 'Ilość musi być liczbą większą od 0.';
         errorMessage.style.display = 'block';
@@ -137,9 +137,9 @@ document.getElementById('confirmButton').onclick = () => {
     const item = { name, price, quantity };
 
     if (editingIndex !== null) {
-        updateReceiptItem(item, editingIndex); // Przekazujemy id, aby edytować przedmiot
+        updateReceiptItem(item, editingIndex);
     } else {
-        saveReceiptItem(item); // Dodajemy nowy przedmiot
+        saveReceiptItem(item);
     }
 
     itemDialog.close();
@@ -149,7 +149,7 @@ document.getElementById('resetButton').onclick = () => {
     itemDialog.close();
 };
 
-// Edycja pozycji
+
 function editItem(id) {
     const item = receiptItems.find(item => item.id === id);
 
@@ -161,9 +161,9 @@ function editItem(id) {
     itemDialog.showModal();
 }
 
-// Usuwanie pozycji
+
 function deleteItem(id) {
     if (confirm('Czy na pewno chcesz usunąć tę pozycję?')) {
-        deleteReceiptItem(id); // Przekazujemy id do usunięcia
+        deleteReceiptItem(id);
     }
 }
